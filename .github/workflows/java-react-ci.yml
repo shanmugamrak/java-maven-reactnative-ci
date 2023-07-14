@@ -53,8 +53,8 @@ jobs:
       - name: Build and test React Native project
         run: yarn test
 
-      - name: Publish artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: app-artifacts
-          path: android/app/build
+      #- name: Publish artifacts
+       # uses: actions/upload-artifact@v2
+        #with:
+         # name: app-artifacts
+          #path: android/app/build
