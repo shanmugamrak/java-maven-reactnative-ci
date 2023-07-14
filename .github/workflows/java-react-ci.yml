@@ -1,0 +1,60 @@
+name: Java, Maven, and React Native CI
+# continuous integration 
+
+on:
+ workflow_dispatch:
+
+env:
+  JAVA_VERSION: '17'
+  NODE_VERSION: '14' 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{env.JAVA_VERSION}}
+          distribution: 'temurin'          
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build and test Java project
+        run: mvn -B package --file pom.xml        
+        #run: mvn clean install
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{env.NODE_VERSION}}
+
+
+      - name: Cache Yarn packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install npm dependencies
+        run: yarn install
+        #run: yarn install --frozen-lockfile
+
+      - name: Build and test React Native project
+        run: yarn test
+
+      - name: Publish artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-artifacts
+          path: android/app/build
