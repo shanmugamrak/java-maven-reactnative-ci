@@ -32,13 +32,11 @@ jobs:
 
       - name: Build and test Java project
         run: mvn -B package --file pom.xml        
-        #run: mvn clean install
-
+        
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
           node-version: ${{env.NODE_VERSION}}
-
 
       - name: Cache Yarn packages
         uses: actions/cache@v2
@@ -48,13 +46,15 @@ jobs:
 
       - name: Install npm dependencies
         run: yarn install
-        #run: yarn install --frozen-lockfile
-
+       
       - name: Build and test React Native project
         run: yarn test
 
-      #- name: Publish artifacts
-       # uses: actions/upload-artifact@v2
-        #with:
-         # name: app-artifacts
-          #path: android/app/build
+      - name: creating folder to publish
+        run: mkdir staging && cp target/*jar-with-dependencies.jar staging
+        
+      - name: Publish artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-artifacts
+          path: staging
