@@ -49,12 +49,20 @@ jobs:
        
       - name: Build and test React Native project
         run: yarn test
+        
+      - name: Build project with Maven
+        run: mvn -B package --file pom.xml   
 
       - name: creating folder to publish
         run: mkdir staging && cp target/*jar-with-dependencies.jar staging
         
-      - name: Publish artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: app-artifacts
-          path: staging
+      - name: Publish package
+        run: mvn --batch-mode deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.Workflow2_PAT_TOKEN_GITHUB }}     
+        
+      #- name: Publish artifacts
+       # uses: actions/upload-artifact@v2
+        #with:
+         # name: app-artifacts
+          #path: staging
