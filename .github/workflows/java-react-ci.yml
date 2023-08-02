@@ -50,10 +50,10 @@ jobs:
       - name: Build and test React Native project
         run: yarn test
         
-      - name: Build project with Maven
-        run: mvn -B package --file pom.xml   
+     # - name: Build project with Maven
+      #  run: mvn -B package --file pom.xml   
 
-      - name: Publish package
-        run: mvn --batch-mode deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.Workflow2_PAT_TOKEN_GITHUB }}     
+     # - name: Publish package
+      #  run: mvn --batch-mode deploy
+       # env:
+        #  GITHUB_TOKEN: ${{ secrets.Workflow2_PAT_TOKEN_GITHUB }}     
